@@ -14,10 +14,16 @@
     <a href="" onclick="loopStart()">loopStart</a>
     <a href="" onclick="loopStop()">loopStop</a>
     <script>
+      const { ipcRenderer } = require('electron')
       ipcRenderer.on('loopStart', (event, args) => {
         console.log(arg)
       })
-      ipcRenderer.send('loopStart')
+      function loopStart () {
+        ipcRenderer.send('loopStart')
+      }
+      function loopStop() {
+        ipcRenderer.send('loopStop')
+      }
     </script>
   </body>
 </html>

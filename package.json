@@ -1,5 +1,5 @@
 {
-  "name": "ele",
+  "name": "1",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -9,7 +9,7 @@
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {
+  "devDependencies": {
     "electron": "^7.1.3",
     "shelljs": "^0.8.3"
   }
