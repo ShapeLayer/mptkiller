@@ -2,28 +2,82 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>Hello World!</title>
+    <title>Kill MyPcToast.exe</title>
     <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+    <style>
+    p {
+      margin: 5px;
+    }
+    input {
+      margin-bottom: 15px;
+    }
+    button {
+      margin-bottom: 5px;
+      border: none;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+    }
+    #loopStart {
+      background-color: #4CAF50;
+    }
+    #loopStop {
+      background-color: #f44336;
+    }
+    #setDefault {
+      background-color: #e7e7e7;
+      color: black;
+    }
+    </style>
   </head>
   <body>
-    <!--<h1>Hello World!</h1>
-    We are using node <script>document.write(process.versions.node)</script>,
-    Chrome <script>document.write(process.versions.chrome)</script>,
-    and Electron <script>document.write(process.versions.electron)</script>.-->
-    <a href="" onclick="loopStart()">loopStart</a>
-    <a href="" onclick="loopStop()">loopStop</a>
+    <section>
+      <label for="target">
+        <p>대상 프로세스</p>
+        <input type="text" placeholder="" name="target" id="target" value="">
+      </label>
+      <label for="delay">
+        <p>지연시간</p>
+        <input type="number" placeholder="n초" name="delay" id="delay" value="">
+      </label>
+      <p>이 프로그램이 작동되는 동안 내PC지키미의 PC 점검 점수를 자동으로 닫습니다.</p>
+      <span>
+        <button id="loopStart" onclick="loopStart()" style="display: block;">시작</button>
+        <button id="loopStop" onclick="loopStop()" style="display: none;">중지</button>
+        <button id="setDefault" onclick="setDefault()" style="display: block;">기본값으로 설정</button>    
+      </span>
+    </section>
     <script>
       const { ipcRenderer } = require('electron')
       ipcRenderer.on('loopStart', (event, args) => {
         console.log(arg)
       })
+      const setTarget = 'MyPcToast'
+      const setDelay = '0.3'
       function loopStart () {
-        ipcRenderer.send('loopStart')
+        document.getElementById('loopStart').style="display: none;"
+        document.getElementById('loopStop').style="display: block;"
+        document.getElementById('setDefault').style="display: none;"
+        ipcRenderer.send('loopStart', [
+          document.getElementById('target').value,
+          document.getElementById('delay').value
+        ])
       }
       function loopStop() {
+        document.getElementById('loopStart').style = 'display: block;'
+        document.getElementById('loopStop').style = 'display: none;'
+        document.getElementById('setDefault').style = 'display: block;'
         ipcRenderer.send('loopStop')
       }
+      function setDefault() {
+        document.getElementById('target').value = setTarget
+        document.getElementById('delay').value = setDelay
+      }
+      setDefault()
     </script>
   </body>
 </html>

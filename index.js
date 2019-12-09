@@ -12,18 +12,17 @@ let stopperLoop
 function createWindow () {
   // 브라우저 창을 생성합니다.
   win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 250,
+    height: 400,
     webPreferences: {
       nodeIntegration: true
-    }
+    },
+    resizable: false
   })
 
   // and load the index.html of the app.
   win.loadFile('index.html')
 
-  // 개발자 도구를 엽니다.
-  win.webContents.openDevTools()
 
   // 창이 닫힐 때 발생합니다
   win.on('closed', () => {
@@ -33,27 +32,25 @@ function createWindow () {
   })
 }
 
-function killLoop () {
-    if (shell.exec('taskkill /f /im explorer.exe') == 0) {
+function killLoop (args) {
+    if (shell.exec('taskkill /f /im ' + args) == 0) {
         return true
     } else {
         return false
     }
 }
 
-function loopStart () {
+function loopStart (args) {
   stopperLoop = setInterval(() => {
-  if (killLoop()) {
+  if (killLoop(args[0])) {
       /* 프로세스 종료 완료 */
     } else {
       /* 프로세스 종료 실패*/
     }
-  }, 300)
-  console.log('loopStart')
+  }, args[1]*1000)
 }
 
 function loopStop () {
-  console.log('loopStop')
   clearInterval(stopperLoop)
 }
 
@@ -82,8 +79,8 @@ app.on('activate', () => {
 
 // 이 파일 안에 당신 앱 특유의 메인 프로세스 코드를 추가할 수 있습니다. 별도의 파일에 추가할 수도 있으며 이 경우 require 구문이 필요합니다.
 
-ipcMain.on('loopStart', (event) => {
-  loopStart()
+ipcMain.on('loopStart', (event, args) => {
+  loopStart(args)
   event.returnValue = true
 })
 
