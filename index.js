@@ -4,7 +4,10 @@ const shell = require('shelljs')
 // window 객체는 전역 변수로 유지. 이렇게 하지 않으면, 
 // 자바스크립트 객체가 가비지 콜렉트될 때 자동으로 창이 닫힐 것입니다.
 
-shell.config.execPath = shell.which('node').toString()
+try {
+  shell.config.execPath = shell.which('node').toString()
+}
+catch {}
 
 let win
 let stopperLoop
