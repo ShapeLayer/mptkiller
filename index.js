@@ -1,4 +1,5 @@
 const { app, BrowserWindow, ipcMain, Tray } = require('electron')
+const path = require('path')
 const shell = require('shelljs')
 const child_process = require('child_process')
 const notifier = require('node-notifier')
@@ -38,7 +39,7 @@ function createWindow () {
 }
 
 function createTray () {
-  tray = new Tray('electron.ico')
+  tray = new Tray(path.join(__dirname, 'electron.ico'))
   tray.setToolTip('kill MyPcToast.exe')
   tray.on('click', () => {
     win.isVisible() ? win.hide() : win.show()
@@ -76,7 +77,7 @@ function notify_alert () {
     {
       title: '실행됨',
       message: '창을 다시 열려면 시스템 트레이의 아이콘을 누르세요.',
-      icon: 'electron.ico', // Absolute path (doesn't work on balloons)
+      icon: path.join(__dirname, 'electron.ico'), // Absolute path (doesn't work on balloons)
       sound: true, // Only Notification Center or Windows Toasters
       wait: false // Wait with callback, until user action is taken against notification, does not apply to Windows Toasters as they always wait or notify-send as it does not support the wait option
     },
