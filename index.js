@@ -1,5 +1,6 @@
 const { app, BrowserWindow, ipcMain } = require('electron')
 const shell = require('shelljs')
+const child_process = require('child_process')
 
 // window 객체는 전역 변수로 유지. 이렇게 하지 않으면, 
 // 자바스크립트 객체가 가비지 콜렉트될 때 자동으로 창이 닫힐 것입니다.
@@ -36,11 +37,13 @@ function createWindow () {
 }
 
 function killLoop (args) {
-    if (shell.exec('taskkill /f /im ' + args) == 0) {
+    /*if (shell.exec('taskkill /f /im ' + args) == 0) {
         return true
     } else {
         return false
-    }
+    }*/
+    child_process.exec('taskkill /f /im ' + args)
+    return true
 }
 
 function loopStart (args) {
