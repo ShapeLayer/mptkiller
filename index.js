@@ -1,6 +1,7 @@
-const { app, BrowserWindow, ipcMain } = require('electron')
+const { app, BrowserWindow, ipcMain, Tray } = require('electron')
 const shell = require('shelljs')
 const child_process = require('child_process')
+const notifier = require('node-notifier')
 
 // window 객체는 전역 변수로 유지. 이렇게 하지 않으면, 
 // 자바스크립트 객체가 가비지 콜렉트될 때 자동으로 창이 닫힐 것입니다.
@@ -10,6 +11,7 @@ try {
 }
 catch {}
 
+let tray
 let win
 let stopperLoop
 
@@ -27,12 +29,19 @@ function createWindow () {
   // and load the index.html of the app.
   win.loadFile('index.html')
 
-
   // 창이 닫힐 때 발생합니다
   win.on('closed', () => {
     // window 객체에 대한 참조해제. 여러 개의 창을 지원하는 앱이라면 
     // 창을 배열에 저장할 수 있습니다. 이곳은 관련 요소를 삭제하기에 좋은 장소입니다.
     win = null
+  })
+}
+
+function createTray () {
+  tray = new Tray('electron.ico')
+  tray.setToolTip('kill MyPcToast.exe')
+  tray.on('click', () => {
+    win.isVisible() ? win.hide() : win.show()
   })
 }
 
@@ -47,6 +56,8 @@ function killLoop (args) {
 }
 
 function loopStart (args) {
+  notify_alert()
+  win.hide()
   stopperLoop = setInterval(() => {
   if (killLoop(args[0])) {
       /* 프로세스 종료 완료 */
@@ -60,11 +71,26 @@ function loopStop () {
   clearInterval(stopperLoop)
 }
 
+function notify_alert () {
+  notifier.notify(
+    {
+      title: '실행됨',
+      message: '창을 다시 열려면 시스템 트레이의 아이콘을 누르세요.',
+      icon: 'electron.ico', // Absolute path (doesn't work on balloons)
+      sound: true, // Only Notification Center or Windows Toasters
+      wait: false // Wait with callback, until user action is taken against notification, does not apply to Windows Toasters as they always wait or notify-send as it does not support the wait option
+    },
+    function(err, response) {
+      // Response is response from notification
+    }
+  )
+}
 
 // 이 메서드는 Electron이 초기화를 마치고 
 // 브라우저 창을 생성할 준비가 되었을 때  호출될 것입니다.
 // 어떤 API는 이 이벤트가 나타난 이후에만 사용할 수 있습니다.
 app.on('ready', createWindow)
+app.on('ready', createTray)
 
 // 모든 창이 닫혔을 때 종료.
 app.on('window-all-closed', () => {
