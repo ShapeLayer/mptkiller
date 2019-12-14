@@ -123,6 +123,3 @@ ipcMain.on('loopStop', (event) => {
   loopStop()
   event.returnValue = false
 })
-ipcMain.on('appUpdate', () => {
-  autoUpdater.quitAndInstall()
-})

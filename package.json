@@ -8,21 +8,6 @@
     "start": "electron .",
     "build": "electron-packager . mptkiller"
   },
-  "build": {
-    "appId": "com.github.kpjhg0124.mptkiller",
-    "productName": "mptKiller",
-    "directories": {
-      "output": "output"
-    },
-    "publish": {
-      "provider": "github",
-      "private": false
-    },
-    "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true
-    }
-  },
   "author": "",
   "license": "ISC",
   "devDependencies": {
