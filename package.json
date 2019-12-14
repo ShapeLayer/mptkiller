@@ -1,12 +1,27 @@
 {
-  "name": "killMyPcToast",
+  "name": "mptkiller",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron .",
-    "build": "electron-packager . killMyPcToast"
+    "build": "electron-packager . mptkiller"
+  },
+  "build": {
+    "appId": "com.github.kpjhg0124.mptkiller",
+    "productName": "mptKiller",
+    "directories": {
+      "output": "output"
+    },
+    "publish": {
+      "provider": "github",
+      "private": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
   },
   "author": "",
   "license": "ISC",
