@@ -24,8 +24,11 @@ function createWindow () {
     webPreferences: {
       nodeIntegration: true
     },
-    resizable: false
+    resizable: false,
+    fullscreenable: false
   })
+
+  win.setMenu(null)
 
   // and load the index.html of the app.
   win.loadFile('index.html')
